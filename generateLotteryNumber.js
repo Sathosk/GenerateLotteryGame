@@ -53,7 +53,7 @@ async function getHowManyGames() {
 }
 
 function generateLotteryNumbers() {
-  let lotteryNumbers = [];
+  const lotteryNumbers = [];
   const lotteryRange = lotteryInfo.range;
   const numbersToPlay = lotteryInfo.numbersToPlay;
 
@@ -64,12 +64,11 @@ function generateLotteryNumbers() {
       randomNumber = Math.floor(Math.random() * lotteryRange) + 1;
     }
 
-    lotteryNumbers = lotteryNumbers.sort((a, b) => a - b);
     lotteryNumbers.push(randomNumber);
   }
 
   // console.log('Enjoy your millions:', lotteryNumbers.sort((a, b) => a - b));
-  lotteryInfo.games.push(lotteryNumbers);
+  lotteryInfo.games.push(lotteryNumbers.sort((a, b) => a - b));
 }
 
 async function start() {
