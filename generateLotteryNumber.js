@@ -5,7 +5,7 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-const lotteryInfo = {};
+const lotteryInfo = {games: []};
 
 async function getLotteryRange() {
   return new Promise((resolve) => {
@@ -37,8 +37,23 @@ async function getHowManyNumbers() {
   });
 }
 
+async function getHowManyGames() {
+  return new Promise((resolve) => {
+    rl.question('How many games will you play?  ', (answer) => {
+      lotteryInfo.howManyGames = parseInt(answer);
+
+      if (!isNaN(lotteryInfo.howManyGames) && lotteryInfo.howManyGames > 0) {
+        resolve();
+      } else {
+        console.log('Please enter a valid number.');
+        getHowManyGames().then(resolve);
+      }
+    });
+  });
+}
+
 function generateLotteryNumbers() {
-  const lotteryNumbers = [];
+  let lotteryNumbers = [];
   const lotteryRange = lotteryInfo.range;
   const numbersToPlay = lotteryInfo.numbersToPlay;
 
@@ -49,16 +64,23 @@ function generateLotteryNumbers() {
       randomNumber = Math.floor(Math.random() * lotteryRange) + 1;
     }
 
+    lotteryNumbers = lotteryNumbers.sort((a, b) => a - b);
     lotteryNumbers.push(randomNumber);
   }
 
-  console.log('Enjoy your millions:', lotteryNumbers.sort((a, b) => a - b));
+  // console.log('Enjoy your millions:', lotteryNumbers.sort((a, b) => a - b));
+  lotteryInfo.games.push(lotteryNumbers);
 }
 
 async function start() {
   await getLotteryRange();
   await getHowManyNumbers();
-  generateLotteryNumbers();
+  await getHowManyGames();
+  for (let i = 0; i < lotteryInfo.howManyGames; i++) {
+    generateLotteryNumbers();
+  }
+
+  console.log('Enjoy your millions:', lotteryInfo.games);
   rl.close();
 }
 
