@@ -57,6 +57,11 @@ function generateLotteryNumbers() {
   const lotteryRange = lotteryInfo.range;
   const numbersToPlay = lotteryInfo.numbersToPlay;
 
+  if (lotteryRange < numbersToPlay) {
+    console.log('Error: Not enough unique numbers in the range to play.');
+    return;
+  }
+
   for (let i = 0; i < numbersToPlay; i++) {
     let randomNumber = Math.floor(Math.random() * lotteryRange) + 1;
 
